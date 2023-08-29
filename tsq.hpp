@@ -23,10 +23,12 @@ class threadSafeQueue
     void waitNewData()
     {
         std::unique_lock<std::mutex> lock(queueCondMutex);
-        while (!condQueue)  
-            handleQueueCond.wait(lock, [&]{return condQueue == true; });
+        while (!condQueue)
+            handleQueueCond.wait(lock, [&]
+                                 { return condQueue == true; });
         condQueue = false;
     }
+
 public:
     threadSafeQueue()
     {
@@ -41,11 +43,19 @@ public:
         queue.push(data);
         notifyNewData();
     }
-    void wait_and_pop(T &popped_value)
+    bool try_pop(T &popped_value)
     {
-        waitNewData();
+        if (queue.empty())
+        {
+            return false;
+        }
         std::lock_guard<std::mutex> lock(processQueueMutex);
         popped_value = queue.front();
         queue.pop();
+        return true;
+    }
+    void wait_available()
+    {
+        waitNewData();
     }
 };

@@ -12,8 +12,6 @@
 #####    2.3 wait and pop data 
    `testobj t;`
    `tsq.wait_and_pop(t);`
-#####    2.3 try pop data 
-   `testobj t;`
-   `tsq.try_pop(t);`
+
 
 Please refer to test.cpp for more references.

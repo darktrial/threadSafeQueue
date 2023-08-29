@@ -6,6 +6,7 @@ class testobj
 {
 public:
     std::string name;
+    unsigned size;
 };
 
 void processQueue(threadSafeQueue<testobj> &tsq)
@@ -15,9 +16,7 @@ void processQueue(threadSafeQueue<testobj> &tsq)
     {
         tsq.wait_and_pop(t);
         std::cout << t.name << std::endl;
-        while (tsq.try_pop(t))
-            std::cout << t.name << std::endl;
-        
+        std::cout << t.size << std::endl;
     }
 }
 
@@ -27,9 +26,10 @@ int main(int argc, char *argv[])
     threadSafeQueue<testobj> tsq;
 
     t.name = "test";
+    t.size=1234567;
     std::thread t1(processQueue, std::ref(tsq));
     sleep(1);
     tsq.push(t);
-    sleep(3);
+    sleep(2);
     exit(0);
 }

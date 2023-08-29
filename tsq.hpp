@@ -41,17 +41,6 @@ public:
         queue.push(data);
         notifyNewData();
     }
-    bool try_pop(T &popped_value)
-    {
-        if (queue.empty())
-        {
-            return false;
-        }
-        std::lock_guard<std::mutex> lock(processQueueMutex);
-        popped_value = queue.front();
-        queue.pop();
-        return true;
-    }
     void wait_and_pop(T &popped_value)
     {
         waitNewData();

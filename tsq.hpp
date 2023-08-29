@@ -22,9 +22,9 @@ class threadSafeQueue
     }
     void waitNewData()
     {
-        std::unique_lock<std::mutex> ulock(queueCondMutex);
+        std::unique_lock<std::mutex> lock(queueCondMutex);
         while (!condQueue)  
-            handleQueueCond.wait(ulock, [&]{return condQueue == true; });
+            handleQueueCond.wait(lock, [&]{return condQueue == true; });
         condQueue = false;
     }
 public:
